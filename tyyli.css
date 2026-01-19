@@ -267,3 +267,28 @@ h1 {
     flex-wrap: wrap;
   }
 }
+/* FOOTER */
+.site-footer {
+  background: #1f2933;
+  color: #e5e7eb;
+  padding: 30px 20px;
+  margin-top: 40px;
+  border-top: 3px solid #2ea177;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 14px;
+}
+
+.footer-content p {
+  margin: 6px 0;
+}
+
+.footer-copy {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #9ca3af;
+}

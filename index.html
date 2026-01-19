@@ -50,16 +50,25 @@
 </header>
 
 <div class="container">
-<div class="category-buttons">
-  <button class="category-btn active" onclick="filterByCategory('kaikki')">Kaikki</button> 
-  <button class="category-btn" onclick="filterByCategory('urheilu')">Urheilu</button>
-  <button class="category-btn" onclick="filterByCategory('musiikki')">Musiikki</button>
-  <button class="category-btn" onclick="filterByCategory('kulttuuri')">Kulttuuri</button>
-</div>
-
-    <div id="eventsGrid" class="events-grid"></div>
+  <div class="category-buttons">
+    <button class="category-btn active" onclick="filterByCategory('kaikki')">Kaikki</button> 
+    <button class="category-btn" onclick="filterByCategory('urheilu')">Urheilu</button>
+    <button class="category-btn" onclick="filterByCategory('musiikki')">Musiikki</button>
+    <button class="category-btn" onclick="filterByCategory('kulttuuri')">Kulttuuri</button>
   </div>
 
-  <script src="script.js"> </script>
+  <div id="eventsGrid" class="events-grid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <p><strong>Mikkelin tapahtumat</strong></p>
+    <p>Ajantasaiset tapahtumat Mikkelissä yhdessä paikassa</p>
+    <p class="footer-copy">© 2026 Mikkelin tapahtumat</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
