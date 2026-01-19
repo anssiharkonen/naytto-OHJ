@@ -1,15 +1,23 @@
-    * {
+/* ============================= */
+/* PERUSASETUKSET */
+/* ============================= */
+html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   font-family: Arial, sans-serif;
   background: #f3f4f6;
   color: #222;
 }
 
+/* ============================= */
+/* HEADER */
+/* ============================= */
 header {
   position: sticky;
   top: 0;
@@ -124,12 +132,32 @@ h1 {
   cursor: pointer;
 }
 
+/* ============================= */
+/* CONTAINER JA GRID */
+/* ============================= */
 .container {
+  flex: 1 0 auto; /* täyttää jäljellä olevan tilan footerin alle */
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+  width: 100%;
+  min-height: 0; /* korjaa flex-venymisen ongelmat */
+  flex: 1 0 auto;
+}
+
+/* ============================= */
+/* KATEGORIAPAINIKKEET */
+/* ============================= */
 .category-buttons {
   display: flex;
   justify-content: center;
@@ -157,13 +185,9 @@ h1 {
   font-weight: bold;
 }
 
-.events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
+/* ============================= */
+/* EVENT CARDIT */
+/* ============================= */
 .event-card {
   background: white;
   border-radius: 10px;
@@ -196,17 +220,9 @@ h1 {
   color: white;
 }
 
-.category-urheilu {
-  background: #2563eb;
-}
-
-.category-musiikki {
-  background: #d946ef;
-}
-
-.category-kulttuuri {
-  background: #f59e0b;
-}
+.category-urheilu { background: #2563eb; }
+.category-musiikki { background: #d946ef; }
+.category-kulttuuri { background: #f59e0b; }
 
 .event-title {
   font-size: 1.3em;
@@ -249,30 +265,24 @@ h1 {
   padding: 40px;
 }
 
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
 @media (max-width: 768px) {
-  .events-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .search-input {
-    width: 100%;
-  }
-
-  .header-controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filter-row {
-    flex-wrap: wrap;
-  }
+  .events-grid { grid-template-columns: 1fr; }
+  .search-input { width: 100%; }
+  .header-controls { flex-direction: column; align-items: stretch; }
+  .filter-row { flex-wrap: wrap; }
 }
+
+/* ============================= */
 /* FOOTER */
+/* ============================= */
 .site-footer {
+  flex-shrink: 0; /* footer ei kutistu */
   background: #1f2933;
   color: #e5e7eb;
   padding: 30px 20px;
-  margin-top: 40px;
   border-top: 3px solid #2ea177;
 }
 
@@ -283,12 +293,6 @@ h1 {
   font-size: 14px;
 }
 
-.footer-content p {
-  margin: 6px 0;
-}
+.footer-content p { margin: 6px 0; }
 
-.footer-copy {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #9ca3af;
-}
+.footer-copy { margin-top: 10px; font-size: 13px; color: #9ca3af; }
