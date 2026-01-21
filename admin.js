@@ -1,22 +1,60 @@
+/* =============================
+   SALASANASUOJAUS JA ISTUNTO
+   ============================= */
 const STORAGE_KEY = 'mikkeliEvents';
-let currentImageData = ""; // Tähän tallennetaan kuva tekstimuodossa
+const ADMIN_PASS = "mikkeli2026"; // Voit vaihtaa salasanan tästä
 
-// 1. KUVAESIKATSELU JA MUUNNOS
-document.getElementById('imageInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            currentImageData = event.target.result; // Base64-merkkijono
-            const preview = document.getElementById('imagePreview');
-            preview.src = currentImageData;
-            preview.style.display = 'block';
-        };
-        reader.readAsDataURL(file); // Muuntaa tiedon tekstiksi
+function tarkistaKirjautuminen() {
+    // Tarkistetaan onko käyttäjä jo kirjautunut tässä istunnossa
+    if (sessionStorage.getItem('isAdmin') === 'true') {
+        naytaSisalto();
+        return;
     }
-});
 
-// 2. TALLENNUS
+    const syote = prompt("Syötä salasana päästäksesi hallintaan:");
+
+    if (syote === ADMIN_PASS) {
+        sessionStorage.setItem('isAdmin', 'true');
+        naytaSisalto();
+    } else {
+        alert("Väärä salasana! Ohjataan takaisin pääsivulle.");
+        window.location.href = "index.html";
+    }
+}
+
+function naytaSisalto() {
+    document.getElementById('adminContent').style.display = 'block';
+    renderAdminTable();
+}
+
+// Käynnistetään tarkistus
+tarkistaKirjautuminen();
+
+/* =============================
+   KUVAESIKATSELU JA MUUNNOS
+   ============================= */
+let currentImageData = "";
+
+const imageInput = document.getElementById('imageInput');
+if (imageInput) {
+    imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                currentImageData = event.target.result;
+                const preview = document.getElementById('imagePreview');
+                preview.src = currentImageData;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+/* =============================
+   TALLENNUS
+   ============================= */
 document.getElementById('eventForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -30,7 +68,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
         category: document.getElementById('category').value,
         price: document.getElementById('price').value,
         description: document.getElementById('description').value,
-        image: currentImageData || "kuvat/default.jpg" // Käytetään valittua kuvaa
+        image: currentImageData || "kuvat/default.jpg"
     };
 
     const events = getEvents();
@@ -44,7 +82,9 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     alert('Tapahtuma tallennettu!');
 });
 
-// APUFUNKTIOT
+/* =============================
+   APUFUNKTIOT
+   ============================= */
 function getEvents() {
     return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 }
@@ -64,6 +104,8 @@ function deleteEvent(index) {
 
 function renderAdminTable() {
     const list = document.getElementById('adminEventList');
+    if (!list) return;
+    
     const events = getEvents();
     list.innerHTML = '';
     events.forEach((event, index) => {
@@ -76,5 +118,3 @@ function renderAdminTable() {
         list.appendChild(tr);
     });
 }
-
-renderAdminTable();

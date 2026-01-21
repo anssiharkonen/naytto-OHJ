@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mikkelin tapahtumat</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="tyyli.css">
 </head>
 <body>
@@ -18,7 +20,6 @@
         <div class="filter-row">
           <button class="btn active" onclick="Suodatavalitut('all')">Näytä kaikki</button>
         </div>
-
         <div class="filter-row">
           <button class="btn" onclick="showDateFilter('paiva')">Päivä</button>
           <input id="paivaInput" type="date" class="date-picker">
@@ -26,25 +27,8 @@
           <input id="aikaPaivaAl" type="time" class="time-picker">
           <input id="aikaPaivaLo" type="time" class="time-picker">
         </div>
-
-        <div class="filter-row">
-          <button class="btn" onclick="showDateFilter('viikko')">Viikko</button>
-          <input id="viikkoInput" type="week" class="date-picker">
-          <button class="btn-aika" id="aikaViikkoBtn" onclick="Aikavalinta('viikko')">Aika välillä</button>
-          <input id="aikaViikkoAl" type="time" class="time-picker">
-          <input id="aikaViikkoLo" type="time" class="time-picker">
         </div>
-
-        <div class="filter-row">
-          <button class="btn" onclick="showDateFilter('kuukausi')">Kuukausi</button>
-          <input id="kuukausiInput" type="month" class="date-picker">
-          <button class="btn-aika" id="aikaKuukausiBtn" onclick="Aikavalinta('kuukausi')">Aika välillä</button>
-          <input id="aikaKuukausiAl" type="time" class="time-picker">
-          <input id="aikaKuukausiLo" type="time" class="time-picker">
-        </div>
-      </div>
     </div>
-
     <a href="admin.html" class="admin-nav-btn">Hallinta</a>
   </div>
 </header>
@@ -56,15 +40,13 @@
     <button class="category-btn" onclick="filterByCategory('musiikki')">Musiikki</button>
     <button class="category-btn" onclick="filterByCategory('kulttuuri')">Kulttuuri</button>
   </div>
-
   <div id="eventsGrid" class="events-grid"></div>
 </div>
 
 <footer class="site-footer">
   <div class="footer-content">
     <p><strong>Mikkelin tapahtumat</strong></p>
-    <p>Ajantasaiset tapahtumat Mikkelissä yhdessä paikassa</p>
-    <p class="footer-copy">© 2026 Mikkelin tapahtumat</p>
+    <p>© 2026 Mikkelin tapahtumat</p>
   </div>
 </footer>
 

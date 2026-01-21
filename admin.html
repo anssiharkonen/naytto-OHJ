@@ -10,23 +10,14 @@
         .admin-form { display: grid; gap: 15px; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 40px; }
         .admin-form input, .admin-form select, .admin-form textarea { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; width: 100%; box-sizing: border-box; }
         .form-row { display: flex; gap: 10px; }
-        
-        /* Kuvan esikatselun tyyli */
-        #imagePreview { 
-            width: 100%; 
-            max-height: 200px; 
-            object-fit: cover; 
-            border-radius: 5px; 
-            display: none; 
-            margin-top: 10px;
-            border: 1px solid #ddd;
-        }
-
+        #imagePreview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 5px; display: none; margin-top: 10px; border: 1px solid #ddd; }
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .admin-table th, .admin-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
         .admin-table th { background-color: #2ea177; color: white; }
         .delete-btn { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
         .back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #2ea177; font-weight: bold; }
+        /* Piilotetaan sisältö ennen kirjautumista */
+        #adminContent { display: none; }
     </style>
 </head>
 <body>
@@ -35,7 +26,7 @@
     <h1>Tapahtumien hallinta</h1>
 </header>
 
-<div class="admin-container">
+<div id="adminContent" class="admin-container">
     <a href="index.html" class="back-link">← Takaisin pääsivulle</a>
 
     <h3>Lisää uusi tapahtuma</h3>
