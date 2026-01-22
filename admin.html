@@ -10,6 +10,8 @@
         .admin-form { display: grid; gap: 15px; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 40px; }
         .admin-form input, .admin-form select, .admin-form textarea { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; width: 100%; box-sizing: border-box; }
         .form-row { display: flex; gap: 10px; }
+        .form-group { flex: 1; }
+        .form-group label { display: block; font-size: 12px; margin-bottom: 5px; color: #666; }
         #imagePreview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 5px; display: none; margin-top: 10px; border: 1px solid #ddd; }
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .admin-table th, .admin-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
@@ -34,8 +36,14 @@
         <input type="text" id="name" placeholder="Tapahtuman nimi" required>
         
         <div class="form-row">
-            <input type="text" id="date" placeholder="Päivämäärä (esim. 24.12.2025)" required>
-            <input type="text" id="time" placeholder="Aika (esim. 18:00)" required>
+            <div class="form-group">
+                <label>Päivämäärä</label>
+                <input type="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label>Kellonaika</label>
+                <input type="time" id="time" required>
+            </div>
         </div>
 
         <div class="form-row">
@@ -51,16 +59,16 @@
                 <option value="musiikki">Musiikki</option>
                 <option value="kulttuuri">Kulttuuri</option>
             </select>
-            <input type="text" id="price" placeholder="Hinta" required>
+            <input type="text" id="price" placeholder="Hinta (esim. 15€ tai Ilmainen)" required>
         </div>
 
         <label>Valitse tapahtumakuva:</label>
         <input type="file" id="imageInput" accept="image/*">
         <img id="imagePreview" src="" alt="Esikatselu">
 
-        <textarea id="description" placeholder="Lyhyt kuvaus" rows="3"></textarea>
+        <textarea id="description" placeholder="Lyhyt kuvaus tapahtumasta" rows="3"></textarea>
         
-        <button type="submit" class="category-btn">Tallenna ja julkaise</button>
+        <button type="submit" class="category-btn" style="background:#2ea177; color:white; padding:15px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Tallenna ja julkaise</button>
     </form>
 
     <hr>
@@ -69,7 +77,7 @@
         <thead>
             <tr>
                 <th>Tapahtuma</th>
-                <th>Päivä</th>
+                <th>Päivä & Aika</th>
                 <th>Toiminnot</th>
             </tr>
         </thead>

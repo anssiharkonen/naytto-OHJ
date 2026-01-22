@@ -2,10 +2,9 @@
    SALASANASUOJAUS JA ISTUNTO
    ============================= */
 const STORAGE_KEY = 'mikkeliEvents';
-const ADMIN_PASS = "mikkeli2026"; // Voit vaihtaa salasanan tästä
+const ADMIN_PASS = "mikkeli2026"; 
 
 function tarkistaKirjautuminen() {
-    // Tarkistetaan onko käyttäjä jo kirjautunut tässä istunnossa
     if (sessionStorage.getItem('isAdmin') === 'true') {
         naytaSisalto();
         return;
@@ -27,11 +26,10 @@ function naytaSisalto() {
     renderAdminTable();
 }
 
-// Käynnistetään tarkistus
 tarkistaKirjautuminen();
 
 /* =============================
-   KUVAESIKATSELU JA MUUNNOS
+   KUVAESIKATSELU
    ============================= */
 let currentImageData = "";
 
@@ -53,22 +51,33 @@ if (imageInput) {
 }
 
 /* =============================
-   TALLENNUS
+   TALLENNUS JA MUOTOILU
    ============================= */
 document.getElementById('eventForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    // Haetaan raaka-arvot HTML-kentistä
+    const rawDate = document.getElementById('date').value; // 2026-01-22
+    const rawTime = document.getElementById('time').value; // 18:00
+
+    // Muunnetaan ISO-päivämäärä suomalaiseen muotoon PP.KK.VVVV
+    let formattedDate = rawDate;
+    if (rawDate) {
+        const parts = rawDate.split("-");
+        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+
     const newEvent = {
         name: document.getElementById('name').value,
-        date: document.getElementById('date').value,
-        time: document.getElementById('time').value,
+        date: formattedDate,
+        time: rawTime,
         location: document.getElementById('location').value,
         address: document.getElementById('address').value,
         mapsLink: document.getElementById('mapsLink').value,
         category: document.getElementById('category').value,
         price: document.getElementById('price').value,
         description: document.getElementById('description').value,
-        image: currentImageData || "kuvat/oletus.png" // Päivitetty .png oletuskuva
+        image: currentImageData || "kuvat/oletus.png"
     };
 
     const events = getEvents();
@@ -79,7 +88,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     this.reset();
     document.getElementById('imagePreview').style.display = 'none';
     currentImageData = "";
-    alert('Tapahtuma tallennettu!');
+    alert('Tapahtuma tallennettu onnistuneesti!');
 });
 
 /* =============================
@@ -95,7 +104,7 @@ function saveEvents(events) {
 }
 
 function deleteEvent(index) {
-    if (confirm('Poistetaanko tapahtuma?')) {
+    if (confirm('Haluatko varmasti poistaa tämän tapahtuman?')) {
         const events = getEvents();
         events.splice(index, 1);
         saveEvents(events);
@@ -108,11 +117,12 @@ function renderAdminTable() {
     
     const events = getEvents();
     list.innerHTML = '';
+    
     events.forEach((event, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><strong>${event.name}</strong></td>
-            <td>${event.date}</td>
+            <td>${event.date} klo ${event.time}</td>
             <td><button class="delete-btn" onclick="deleteEvent(${index})">Poista</button></td>
         `;
         list.appendChild(tr);
