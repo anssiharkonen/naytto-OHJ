@@ -157,10 +157,13 @@ function displayEvents(eventsToShow) {
         const card = document.createElement('div');
         card.className = 'event-card';
         
+        // Määritellään kuva: jos event.image puuttuu tai on tyhjä, käytetään oletuskuvaa
+        const imageUrl = event.image || 'kuvat/oletus.png';
+        
         const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.address)}`;
         
         card.innerHTML = `
-          ${event.image ? `<img src="${event.image}" class="event-image" alt="${event.name}">` : '<div class="event-image"></div>'}
+          <img src="${imageUrl}" class="event-image" alt="${event.name}" onerror="this.src='kuvat/oletus.png'">
           <div class="event-content">
             <span class="event-category category-${event.category}">${event.category}</span>
             <h2 class="event-title">${event.name}</h2>

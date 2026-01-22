@@ -68,7 +68,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
         category: document.getElementById('category').value,
         price: document.getElementById('price').value,
         description: document.getElementById('description').value,
-        image: currentImageData || "kuvat/default.jpg"
+        image: currentImageData || "kuvat/oletus.png" // Päivitetty .png oletuskuva
     };
 
     const events = getEvents();
