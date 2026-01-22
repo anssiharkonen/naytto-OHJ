@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mikkelin tapahtumakartta</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="tyyli.css">
+  
+  <style>
+    /* Pakotetaan html ja body täyttämään koko ruutu */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Estetään sivun turha skrollaus */
+    }
+
+    /* Kartta täyttää kaiken tilan */
+    #map {
+      height: 100vh;
+      width: 100vw;
+      z-index: 1;
+    }
+
+    /* Kelluva navigointipaneeli */
+    .floating-nav {
+      position: absolute;
+      top: 20px;
+      left: 60px; /* Siirretään sivuun Leafletin zoomausnappien tieltä */
+      z-index: 1000;
+      display: flex;
+      gap: 10px;
+      pointer-events: none; /* Estää paneelia blokkaamasta karttaa napin ympäriltä */
+    }
+
+    /* Sallitaan klikkaukset vain napeissa */
+    .floating-nav a, .floating-nav button {
+      pointer-events: auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      text-decoration: none;
+      border: 2px solid white;
+    }
+
+    /* Mukautetaan kategorianappia karttakäyttöön */
+    .back-btn {
+      background-color: #2ea177;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .back-btn:hover {
+      transform: scale(1.05);
+      background-color: #276929;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="floating-nav">
+    <a href="index.html" class="back-btn">← Takaisin listaan</a>
+  </nav>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="kartta.js"></script>
+
+</body>
+</html>
