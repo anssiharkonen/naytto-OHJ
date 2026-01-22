@@ -1,22 +1,22 @@
-/* =============================
-   SALASANASUOJAUS JA ISTUNTO
-   ============================= */
 const STORAGE_KEY = 'mikkeliEvents';
 const ADMIN_PASS = "mikkeli2026"; 
+let adminMap, adminMarker;
+let currentImageData = "";
 
+/* =============================
+   KIRJAUTUMINEN
+   ============================= */
 function tarkistaKirjautuminen() {
     if (sessionStorage.getItem('isAdmin') === 'true') {
         naytaSisalto();
         return;
     }
-
     const syote = prompt("Syötä salasana päästäksesi hallintaan:");
-
     if (syote === ADMIN_PASS) {
         sessionStorage.setItem('isAdmin', 'true');
         naytaSisalto();
     } else {
-        alert("Väärä salasana! Ohjataan takaisin pääsivulle.");
+        alert("Väärä salasana!");
         window.location.href = "index.html";
     }
 }
@@ -24,15 +24,33 @@ function tarkistaKirjautuminen() {
 function naytaSisalto() {
     document.getElementById('adminContent').style.display = 'block';
     renderAdminTable();
+    initAdminMap();
 }
 
-tarkistaKirjautuminen();
+/* =============================
+   ADMIN-KARTTA
+   ============================= */
+function initAdminMap() {
+    adminMap = L.map('adminMap').setView([61.6887, 27.2723], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(adminMap);
+
+    adminMap.on('click', function(e) {
+        const lat = e.latlng.lat.toFixed(6);
+        const lng = e.latlng.lng.toFixed(6);
+        document.getElementById('lat').value = lat;
+        document.getElementById('lng').value = lng;
+
+        if (adminMarker) {
+            adminMarker.setLatLng(e.latlng);
+        } else {
+            adminMarker = L.marker(e.latlng).addTo(adminMap);
+        }
+    });
+}
 
 /* =============================
-   KUVAESIKATSELU
+   KUVAN KÄSITTELY
    ============================= */
-let currentImageData = "";
-
 const imageInput = document.getElementById('imageInput');
 if (imageInput) {
     imageInput.addEventListener('change', function(e) {
@@ -51,80 +69,63 @@ if (imageInput) {
 }
 
 /* =============================
-   TALLENNUS JA MUOTOILU
+   TALLENNUS
    ============================= */
 document.getElementById('eventForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // Haetaan raaka-arvot HTML-kentistä
-    const rawDate = document.getElementById('date').value; // 2026-01-22
-    const rawTime = document.getElementById('time').value; // 18:00
-
-    // Muunnetaan ISO-päivämäärä suomalaiseen muotoon PP.KK.VVVV
-    let formattedDate = rawDate;
-    if (rawDate) {
-        const parts = rawDate.split("-");
-        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
-    }
+    const rawDate = document.getElementById('date').value;
+    let formattedDate = rawDate.split("-").reverse().join(".");
 
     const newEvent = {
         name: document.getElementById('name').value,
         date: formattedDate,
-        time: rawTime,
+        time: document.getElementById('time').value,
         location: document.getElementById('location').value,
         address: document.getElementById('address').value,
-        mapsLink: document.getElementById('mapsLink').value,
+        lat: parseFloat(document.getElementById('lat').value),
+        lng: parseFloat(document.getElementById('lng').value),
         category: document.getElementById('category').value,
         price: document.getElementById('price').value,
         description: document.getElementById('description').value,
         image: currentImageData || "kuvat/oletus.png"
     };
 
-    const events = getEvents();
+    const events = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     events.push(newEvent);
-    saveEvents(events);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 
-    // Tyhjennys
     this.reset();
+    if(adminMarker) adminMap.removeLayer(adminMarker);
+    adminMarker = null;
     document.getElementById('imagePreview').style.display = 'none';
     currentImageData = "";
-    alert('Tapahtuma tallennettu onnistuneesti!');
-});
-
-/* =============================
-   APUFUNKTIOT
-   ============================= */
-function getEvents() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-}
-
-function saveEvents(events) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    alert('Tallennettu!');
     renderAdminTable();
-}
-
-function deleteEvent(index) {
-    if (confirm('Haluatko varmasti poistaa tämän tapahtuman?')) {
-        const events = getEvents();
-        events.splice(index, 1);
-        saveEvents(events);
-    }
-}
+});
 
 function renderAdminTable() {
     const list = document.getElementById('adminEventList');
-    if (!list) return;
-    
-    const events = getEvents();
+    const events = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     list.innerHTML = '';
-    
     events.forEach((event, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><strong>${event.name}</strong></td>
+            <td>${event.name}</td>
             <td>${event.date} klo ${event.time}</td>
             <td><button class="delete-btn" onclick="deleteEvent(${index})">Poista</button></td>
         `;
         list.appendChild(tr);
     });
 }
+
+window.deleteEvent = function(index) {
+    if (confirm('Poistetaanko?')) {
+        const events = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        events.splice(index, 1);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+        renderAdminTable();
+    }
+};
+
+tarkistaKirjautuminen();
