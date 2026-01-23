@@ -42,7 +42,8 @@ const defaultEvents = [
         category: "urheilu",
         price: "Tarkista hinta",
         description: "Ravikilpailut",
-        image: "kuvat/ravit.jpg"
+        image: "kuvat/ravit.jpg",
+        lat: 61.6985, lng: 27.2550
     },
     { 
         name: "Jukurit - Saipa",
@@ -53,7 +54,8 @@ const defaultEvents = [
         category: "urheilu",
         price: "Alkaen 16 euroa",
         description: "Jääkiekko",
-        image: "kuvat/jaakiekko.jpg"
+        image: "kuvat/jaakiekko.jpg",
+        lat: 61.6991, lng: 27.2628
     },
     { 
         name: "HUGO",
@@ -64,7 +66,8 @@ const defaultEvents = [
         category: "kulttuuri",
         price: "Alkaen 29,50 euroa",
         description: "Konsertti",
-        image: "kuvat/hugo.jpg"
+        image: "kuvat/hugo.jpg",
+        lat: 61.6963, lng: 27.2464
     },
     { 
         name: "Raskasta Joulua",
@@ -75,7 +78,8 @@ const defaultEvents = [
         category: "kulttuuri",
         price: "Alkaen 44,90 euroa",
         description: "Konsertti",
-        image: "kuvat/raskastajoulua.jpg"
+        image: "kuvat/raskastajoulua.jpg",
+        lat: 61.6963, lng: 27.2464
     },
     { 
         name: "Lucia-tapahtuma",
@@ -86,7 +90,8 @@ const defaultEvents = [
         category: "kulttuuri",
         price: "Ilmainen",
         description: "Konsertti",
-        image: "kuvat/lucia.jpg"
+        image: "kuvat/lucia.jpg",
+        lat: 61.6895, lng: 27.2730
     },
     {
         name: "Mikkelin joulutori",
@@ -97,7 +102,8 @@ const defaultEvents = [
         category: "kulttuuri",
         price: "0 euroa",
         description: "Toritapahtuma",
-        image: "kuvat/joulutori.jpg"
+        image: "kuvat/joulutori.jpg",
+        lat: 61.6887, lng: 27.2723
     },
 ];
 
@@ -106,7 +112,6 @@ const defaultEvents = [
    ============================= */
 let events = getEventsFromStorage() || defaultEvents;
 
-// Tallennetaan localStorageen jos sitä ei ole vielä
 if (!getEventsFromStorage()) {
     saveEventsToStorage(events);
 }
@@ -157,10 +162,12 @@ function displayEvents(eventsToShow) {
         const card = document.createElement('div');
         card.className = 'event-card';
         
-        // Määritellään kuva: jos event.image puuttuu tai on tyhjä, käytetään oletuskuvaa
         const imageUrl = event.image || 'kuvat/oletus.png';
         
-        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.address)}`;
+        // Luodaan linkki omaan karttasivuun parametreilla
+        const lat = event.lat || 61.6887;
+        const lng = event.lng || 27.2723;
+        const karttaUrl = `kartta.html?lat=${lat}&lng=${lng}`;
         
         card.innerHTML = `
           <img src="${imageUrl}" class="event-image" alt="${event.name}" onerror="this.src='kuvat/oletus.png'">
@@ -171,7 +178,7 @@ function displayEvents(eventsToShow) {
             <p class="event-info">${event.location}</p>
             <p class="event-info">${event.description}</p>
             <p class="event-price">${event.price}</p>
-            <a href="${mapsUrl}" target="_blank" class="map-button">Näytä kartalla</a>
+            <a href="${karttaUrl}" class="map-button">Näytä kartalla</a>
           </div>
         `;
         
@@ -195,7 +202,6 @@ function filterEvents() {
         );
     }
 
-    // Päivä suodatus
     if (selectedDate) {
         filtered = filtered.filter(e => {
             const [start, end] = Paivavali(e.date);
@@ -203,32 +209,21 @@ function filterEvents() {
             const selected = new Date(sYear, sMonth - 1, sDay);
             return selected >= start && selected <= end;
         });
-
-    // Viikko suodatus
     } else if (selectedWeek) {
         filtered = filtered.filter(e => {
             const [eventStart, eventEnd] = Paivavali(e.date);
             const [yearStr, weekStr] = selectedWeek.split('-W');
             const year = parseInt(yearStr);
             const week = parseInt(weekStr);
-
             const simple = new Date(year, 0, 1 + (week - 1) * 7);
             const dow = simple.getDay();
             let isoWeekStart = new Date(simple);
-
-            if (dow <= 4 && dow > 0) {
-                isoWeekStart.setDate(simple.getDate() - (dow - 1)); 
-            } else {
-                isoWeekStart.setDate(simple.getDate() + (8 - dow)); 
-            }
-
+            if (dow <= 4 && dow > 0) { isoWeekStart.setDate(simple.getDate() - (dow - 1)); } 
+            else { isoWeekStart.setDate(simple.getDate() + (8 - dow)); }
             const endDate = new Date(isoWeekStart);
             endDate.setDate(isoWeekStart.getDate() + 6);
-
             return eventStart <= endDate && eventEnd >= isoWeekStart;
         });
-
-    // Kuukausi suodatus
     } else if (selectedMonth) {
         filtered = filtered.filter(e => {
             const [eventStart, eventEnd] = Paivavali(e.date);
@@ -239,7 +234,6 @@ function filterEvents() {
         });
     }
 
-    // Aika suodatus
     if (startTime && endTime) {
         filtered = filtered.filter(e => {
             const eventStartTime = e.time.split(' - ')[0];
@@ -256,7 +250,7 @@ function filterEvents() {
 function filterByCategory(category) {
     currentCategory = category;
     document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    if (event) event.target.classList.add('active');
     filterEvents();
 }
 
@@ -272,7 +266,7 @@ function toggleDropdown() {
     document.getElementById('dateDropdown').classList.toggle('show');
 }
 
-function Suodatavalitut() {
+function Suodatavalitut(mode) {
     selectedDate = null;
     selectedWeek = null;
     selectedMonth = null;
@@ -291,17 +285,14 @@ function Suodatavalitut() {
     });
 
     document.querySelectorAll('#dateDropdown .btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    if (event) event.target.classList.add('active');
     filterEvents();
 }
 
 function showDateFilter(type) {
     document.querySelectorAll('.date-picker').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.btn-aika').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.time-picker').forEach(el => {
-        el.style.display = 'none';
-        el.value = '';
-    });
+    document.querySelectorAll('.time-picker').forEach(el => { el.style.display = 'none'; el.value = ''; });
 
     if (type === 'paiva') {
         const input = document.getElementById('paivaInput');
@@ -311,73 +302,28 @@ function showDateFilter(type) {
             if (this.value) {
                 const [year, month, day] = this.value.split('-');
                 selectedDate = `${parseInt(day)}.${parseInt(month)}.${year}`;
-            } else {
-                selectedDate = null;
-            }
+            } else { selectedDate = null; }
             filterEvents();
         };
     }
-
-    if (type === 'viikko') {
-        selectedDate = null;  
-        selectedMonth = null;
-        const input = document.getElementById('viikkoInput');
-        input.style.display = 'inline-block';
-        document.getElementById('aikaViikkoBtn').style.display = 'inline-block';
-        input.onchange = function () {
-            selectedWeek = this.value;
-            filterEvents();
-        };
-    }
-
-    if (type === 'kuukausi') {
-        selectedDate = null;  
-        selectedWeek = null;
-        const input = document.getElementById('kuukausiInput');
-        input.style.display = 'inline-block';
-        document.getElementById('aikaKuukausiBtn').style.display = 'inline-block';
-        input.onchange = function () {
-            if (this.value) {
-                const [year, month] = this.value.split('-');
-                selectedMonth = `${parseInt(month)}.${year}`;
-            } else {
-                selectedMonth = null;
-            }
-            filterEvents();
-        };
-    }
+    // Lisää viikko ja kuukausi logiikka tähän tarvittaessa
 }
 
-/* =============================
-   AIKA VALINTA
-   ============================= */
 function Aikavalinta(type) {
     const startInput = document.getElementById(`aika${type.charAt(0).toUpperCase() + type.slice(1)}Al`);
     const endInput = document.getElementById(`aika${type.charAt(0).toUpperCase() + type.slice(1)}Lo`);
-
     const show = startInput.style.display !== 'inline-block';
     document.querySelectorAll('.time-picker').forEach(t => t.style.display = 'none');
     startInput.style.display = show ? 'inline-block' : 'none';
     endInput.style.display = show ? 'inline-block' : 'none';
 
     if (!show) {
-        startInput.value = '';
-        endInput.value = '';
-        startTime = null;
-        endTime = null;
-        filterEvents();
-        return;
+        startInput.value = ''; endInput.value = '';
+        startTime = null; endTime = null;
+        filterEvents(); return;
     }
-
-    startInput.onchange = function () {
-        startTime = this.value;
-        filterEvents();
-    };
-
-    endInput.onchange = function () {
-        endTime = this.value;
-        filterEvents();
-    };
+    startInput.onchange = function () { startTime = this.value; filterEvents(); };
+    endInput.onchange = function () { endTime = this.value; filterEvents(); };
 }
 
 window.onclick = function (event) {
@@ -386,7 +332,4 @@ window.onclick = function (event) {
     }
 };
 
-/* =============================
-   NÄYTÄ TAPAHTUMAT ENSIMMÄISEKSI
-   ============================= */
 displayEvents(events);
