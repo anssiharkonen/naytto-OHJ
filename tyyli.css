@@ -1,260 +1,270 @@
-/* ============================= */
-/* PERUSASETUKSET */
-/* ============================= */
+/* =============================
+   YLEISET TYYLIT & STICKY FOOTER
+   ============================= */
 html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    height: 100%;
+    margin: 0;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
-  color: #222;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    flex-direction: column; /* Pakottaa sisällön pystysuoraan */
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
 }
 
-/* ============================= */
-/* HEADER */
-/* ============================= */
 header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: linear-gradient(135deg, #2ea177, #2ea177);
-  color: white;
-  padding: 20px;
-  border-bottom: 2px solid black;
+    background-color: #2ea177;
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
+/* Container venyy täyttämään tyhjän tilan, mikä pitää footerin alhaalla */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    flex: 1 0 auto; /* Täyttää tilan, mutta ei kutistu liikaa */
+    width: 100%;
+    box-sizing: border-box;
 }
 
+/* =============================
+   HAKU JA HALLINTA
+   ============================= */
 .header-controls {
-  display: flex;
-  justify-content: center; /* Keskittää haku- ja suodatusosiot */
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  position: relative; /* Mahdollistaa Hallinta-painikkeen sijoittelun */
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .search-input {
-  padding: 10px;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
-  width: 250px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    width: 250px;
+    outline: none;
+    transition: border-color 0.3s;
 }
 
-/* Hallintapainike - Pakotettu oikeaan reunaan */
+.search-input:focus {
+    border-color: #2ea177;
+}
+
 .admin-nav-btn {
-  text-decoration: none;
-  background-color: #1f2933;
-  color: white;
-  padding: 10px 20px;
-  font-size: 14px;
-  border-radius: 5px;
-  transition: background 0.3s ease;
-  border: 1px solid rgba(255,255,255,0.1);
-  
-  /* Työpöytänäkymässä oikealle */
-  position: absolute;
-  right: 0;
+    text-decoration: none;
+    color: white;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s;
 }
 
 .admin-nav-btn:hover {
-  background-color: #323f4b;
-  color: #2ea177;
+    background: rgba(255,255,255,0.3);
 }
 
-.dropbtn {
-  background-color: #09b173;
-  color: white;
-  padding: 10px 20px;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.dropbtn:hover {
-  background-color: #276929;
-}
-
-/* Dropdown valikko */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: white;
-  min-width: 300px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  border-radius: 8px;
-  padding: 15px;
-  z-index: 1000;
-}
-
-.show {
-  display: block;
-}
-
-.filter-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.filter-row button {
-  background-color: #3cbc3c;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.date-picker, .time-picker {
-  display: none;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.btn-aika {
-  display: none;
-  font-size: 12px;
-}
-
-/* ============================= */
-/* KONTENTTI */
-/* ============================= */
-.container {
-  flex: 1 0 auto;
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-}
-
+/* =============================
+   KATEGORIAPAINIKKEET & ANIMAATIOT
+   ============================= */
 .category-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
 }
 
 .category-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #2563eb;
-  color: white;
-  font-weight: bold;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: white;
+    color: #555;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    
+    /* ANIMAATION VALMISTELU */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    outline: none;
 }
 
-.category-btn.active { background: #1d4ed8; outline: 2px solid white; }
+/* Leijumisefekti */
+.category-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    color: #000;
+}
 
+/* Painallusefekti */
+.category-btn:active {
+    transform: scale(0.92);
+}
+
+/* Aktiivisen napin tyylit */
+.category-btn.active {
+    background-color: #2ea177;
+    color: white;
+    box-shadow: 0 4px 12px rgba(46, 161, 119, 0.3);
+}
+
+/* Kohtausvärit kategorioittain hover-tilassa */
+.category-btn[onclick*="urheilu"]:hover { background-color: #e3f2fd; color: #1976d2; }
+.category-btn[onclick*="musiikki"]:hover { background-color: #f3e5f5; color: #7b1fa2; }
+.category-btn[onclick*="kulttuuri"]:hover { background-color: #fff3e0; color: #e65100; }
+
+/* =============================
+   TAPAHTUMAKORTIT (GRID)
+   ============================= */
 .events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
 }
 
-/* ============================= */
-/* TAPAHTUMAKORTTI */
-/* ============================= */
 .event-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.event-card:hover { transform: translateY(-5px); }
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
 
 .event-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  background: #ddd;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
 }
 
-.event-content { padding: 20px; }
+.event-content {
+    padding: 20px;
+}
 
 .event-category {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  text-transform: uppercase;
-  color: white;
-  margin-bottom: 10px;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.category-urheilu { background: #2563eb; }
-.category-musiikki { background: #d946ef; }
-.category-kulttuuri { background: #f59e0b; }
+.category-urheilu { background: #e3f2fd; color: #1976d2; }
+.category-musiikki { background: #f3e5f5; color: #7b1fa2; }
+.category-kulttuuri { background: #fff3e0; color: #e65100; }
 
-.event-title { margin: 0 0 10px; font-size: 1.25rem; color: #111; }
-.event-info { margin: 5px 0; font-size: 0.9rem; color: #555; }
-.event-price { font-weight: bold; color: #2ea177; margin: 10px 0; }
+.event-title {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: #222;
+}
+
+.event-info {
+    margin: 5px 0;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.event-price {
+    font-weight: bold;
+    color: #2ea177;
+    margin-top: 15px;
+}
 
 .map-button {
-  display: inline-block;
-  background: #09b173;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 14px;
-  margin-top: 10px;
+    display: block;
+    text-align: center;
+    background: #2ea177;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 15px;
+    font-weight: bold;
+    transition: background 0.3s;
 }
 
-.map-button:hover { background: #276929; }
+.map-button:hover {
+    background: #248a65;
+}
 
-/* ============================= */
-/* FOOTER */
-/* ============================= */
+/* =============================
+   FOOTER (KORJATTU)
+   ============================= */
 .site-footer {
-  background: #1f2933;
-  color: #e5e7eb;
-  padding: 40px 20px;
-  text-align: center;
-  margin-top: 50px;
-  border-top: 4px solid #2ea177;
+    background: #333;
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+    flex-shrink: 0; /* Estää footerin kutistumisen */
+    width: 100%;
 }
 
-/* ============================= */
-/* MOBIILIMUOKKAUKSET */
-/* ============================= */
-@media (max-width: 768px) {
-  .header-controls { 
-    flex-direction: column; 
-    width: 100%; 
-    position: static;
-  }
-  .search-input, .admin-nav-btn, .dropbtn { 
-    width: 100%; 
-    text-align: center; 
-  }
-  .admin-nav-btn {
-    position: static; /* Palautetaan pinoon mobiilissa */
-    margin-top: 10px;
-  }
-  .dropdown-content { width: 90vw; }
+.footer-content p {
+    margin: 5px 0;
+    opacity: 0.8;
+}
+
+/* =============================
+   DROPDOWN VALIKKO
+   ============================= */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: white;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 300px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 15px;
+    border-radius: 10px;
+    right: 0;
+}
+
+.show { display: block; }
+
+.filter-row {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.date-picker, .time-picker {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: none;
 }
